@@ -1,0 +1,23 @@
+# course config files
+*.yaml
+
+# gradle
+.gradle/
+/gradle/
+/gradlew
+/gradlew.bat
+build
+out
+
+# idea config
+.idea
+
+# stages
+/Amazing Numbers/Buzz numbers/
+/Amazing Numbers/Duck numbers/
+/Amazing Numbers/Palindromic numbers/
+/Amazing Numbers/Gapful numbers/
+/Amazing Numbers/Spy numbers/
+/Amazing Numbers/Sunny and Square numbers/
+/Amazing Numbers/Jumping numbers/
+/Amazing Numbers/Happy and Sad numbers/
