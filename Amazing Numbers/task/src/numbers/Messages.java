@@ -9,6 +9,7 @@ public enum Messages {
               * the first parameter represents a starting number;
               * the second parameter shows how many consecutive numbers are to be printed;
             - two natural numbers and properties to search for;
+            - a property preceded by minus must not be present in numbers;
             - separate the parameters with one space;
             - enter 0 to exit."""
     ),
@@ -16,8 +17,8 @@ public enum Messages {
     FIRST_ERROR("The first parameter should be a natural number or zero."),
     SECOND_ERROR("The second parameter should be a natural number."),
     PROPERTY_ERROR("""
-            The property %s is wrong.
-            Available properties: [EVEN, ODD, BUZZ, DUCK, PALINDROMIC, GAPFUL, SPY, SQUARE, SUNNY, JUMPING]
+            The property ... is wrong
+            Available properties: [EVEN, ODD, BUZZ, DUCK, PALINDROMIC, GAPFUL, SPY, SQUARE, SUNNY, JUMPING, HAPPY, SAD]
             """),
     MUTUALLY_EXCLUSIVE_ERROR("""
             The request contains mutually exclusive properties: %s
@@ -25,7 +26,7 @@ public enum Messages {
             """),
     INCORRECT_PROPERTIES("""
             The properties ... are wrong
-            Available properties: [EVEN, ODD, BUZZ, DUCK, PALINDROMIC, GAPFUL, SPY, SQUARE, SUNNY, JUMPING]
+            Available properties: [EVEN, ODD, BUZZ, DUCK, PALINDROMIC, GAPFUL, SPY, SQUARE, SUNNY, JUMPING, HAPPY, SAD]
             """),
     GOODBYE("Goodbye!");
 
