@@ -85,15 +85,6 @@ public class Util {
         return resultList.toArray(new String[0]);
     }
 
-    // Returns a long array containing only the numbers entered by the user.
-    public static long[] numberOnly(String[] userInput) {
-        if (userInput.length == 1) {
-            return new long[]{Long.parseLong(userInput[0])};
-        } else {
-            return new long[]{Long.parseLong(userInput[0]), Long.parseLong(userInput[1])};
-        }
-    }
-
     // Checking if properties in user input are mutually exclusive.
     public static boolean checkMutuallyExclusive(String[] userInputs) {
         boolean containsEven = false;
@@ -148,5 +139,10 @@ public class Util {
                 many--;
             }
         }
+    }
+
+    // Displays an error message using the formatted output from the Messages object and the Property array of lines.
+    public static void printfError(Messages message, String[] property) {
+        System.out.printf(message.toString(), Arrays.toString(property));
     }
 }
