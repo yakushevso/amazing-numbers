@@ -10,6 +10,8 @@ public class Number {
     private final boolean palindromic;
     private final boolean gapful;
     private final boolean spy;
+    private final boolean square;
+    private final boolean sunny;
 
     public Number(long value) {
         this.value = value;
@@ -19,6 +21,8 @@ public class Number {
         this.palindromic = isPalindromic();
         this.gapful = isGapful();
         this.spy = isSpy();
+        this.square = isSquare();
+        this.sunny = isSunny();
     }
 
     public static boolean isNatural(long value) {
@@ -29,10 +33,12 @@ public class Number {
         return (value & 1) == 1;
     }
 
+    // It is a numbers that are either divisible by 7 or end with 7.
     private boolean isBuzzNumber() {
         return value % 7 == 0 || value % 10 == 7;
     }
 
+    // It is a number is a positive number that contains zeros.
     private boolean isDuck() {
         long numTrim = value;
 
@@ -46,6 +52,7 @@ public class Number {
         return false;
     }
 
+    // It is a number is symmetrical, it stays the same regardless of whether we read it from left or right.
     private boolean isPalindromic() {
         long numSrc = value;
         long reversed = 0;
@@ -58,6 +65,7 @@ public class Number {
         return value == reversed;
     }
 
+    // It is a number that contains at least 3 digits and is divisible by the concatenation of its first and last digit without a remainder.
     private boolean isGapful() {
         long n = value;
         int count = 1;
@@ -70,6 +78,7 @@ public class Number {
         return count > 2 && value % (n * 10 + value % 10) == 0;
     }
 
+    // This is a number where the sum of all digits is equal to the product of all digits.
     private boolean isSpy() {
         long num = value;
         long sum = 0;
@@ -85,6 +94,18 @@ public class Number {
         return sum == product;
     }
 
+    // This is integer that is the square of an integer.
+    private boolean isSquare() {
+        long sqrt = (long) Math.sqrt(value);
+        return value == sqrt * sqrt;
+    }
+
+    // This is the number next to which there is a perfect square, if N+1 is a perfect square.
+    private boolean isSunny() {
+        long sqrt = (long) Math.sqrt(value + 1);
+        return value + 1 == sqrt * sqrt;
+    }
+
     public String printPropertiesRow() {
         String isOdd = odd ? "odd" : "even";
         String isBuzz = buzz ? ", buzz" : "";
@@ -92,12 +113,15 @@ public class Number {
         String isPalindromic = palindromic ? ", palindromic" : "";
         String isGapful = gapful ? ", gapful" : "";
         String isSpy = spy ? ", spy" : "";
+        String isSquare = square ? ", square" : "";
+        String isSunny = sunny ? ", sunny" : "";
 
-        return String.format(Locale.US, "%,d is %s%s%s%s%s%s", value, isOdd, isBuzz, isDuck, isPalindromic, isGapful, isSpy);
+        return String.format(Locale.US, "%,d is %s%s%s%s%s%s%s%s",
+                value, isOdd, isBuzz, isDuck, isPalindromic, isGapful, isSpy, isSquare, isSunny);
     }
 
-    public void printPropertiesColumn() {
-        System.out.printf(Locale.US, """
+    public String printPropertiesColumn() {
+        return String.format(Locale.US, """
                         Properties of %,d
                                 even: %b
                                  odd: %b
@@ -106,9 +130,10 @@ public class Number {
                          palindromic: %b
                               gapful: %b
                                  spy: %b
+                              square: %b
+                               sunny: %b
                         """,
-                value, !isOdd(), isOdd(),
-                isBuzzNumber(), isDuck(),
-                isPalindromic(), isGapful(), isSpy());
+                value, !isOdd(), isOdd(), isBuzzNumber(), isDuck(),
+                isPalindromic(), isGapful(), isSpy(), isSquare(), isSunny());
     }
 }

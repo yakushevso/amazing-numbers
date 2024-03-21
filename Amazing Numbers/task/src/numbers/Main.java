@@ -1,45 +1,36 @@
 package numbers;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        try (Scanner sc = new Scanner(System.in)) {
-            System.out.println("Welcome to Amazing Numbers!");
-            Util.instructions();
+        try (Scanner scanner = new Scanner(System.in)) {
+            System.out.println(Messages.GREETING);
+            System.out.println(Messages.INSTRUCTIONS);
             Request request;
 
             do {
-                System.out.println("Enter a request:");
-                String userInput = sc.nextLine();
-                request = Util.checkRequest(userInput);
+                System.out.println(Messages.PROMPT);
+                String[] inputProperty = {"EVEN", "ODD", "BUZZ", "DUCK", "PALINDROMIC", "GAPFUL", "SPY", "SQUARE", "SUNNY"};
+                String[] userInput = scanner.nextLine().toUpperCase().split(" ");
+                long[] value = Util.numberOnly(userInput);
+                String[] property = Util.propertyOnly(userInput);
+                request = Util.checkRequest(userInput, inputProperty, property);
 
                 switch (request) {
-                    case EMPTY -> Util.instructions();
-                    case INVALID_FIRST_NUMBER ->
-                            System.out.println("The first parameter should be a natural number or zero.");
-                    case INVALID_SECOND_NUMBER ->
-                            System.out.println("The second parameter should be a natural number.");
-                    case INVALID_THIRD_NUMBER -> System.out.printf("""
-                            The property [%s] is wrong.
-                            Available properties: [EVEN, ODD, BUZZ, DUCK, PALINDROMIC, GAPFUL, SPY]
-                            """, userInput.split(" ")[2].toUpperCase());
-                    case FIRST_NUMBER -> {
-                        long value = Long.parseLong(userInput);
-                        Util.print(value);
-                    }
-                    case SECOND_NUMBER -> {
-                        long value = Long.parseLong(userInput.split(" ")[0]);
-                        int many = Integer.parseInt(userInput.split(" ")[1]);
-                        Util.print(value, many);
-                    }
-                    case THIRD_NUMBER -> {
-                        long value = Long.parseLong(userInput.split(" ")[0]);
-                        int many = Integer.parseInt(userInput.split(" ")[1]);
-                        String property = userInput.split(" ")[2].toLowerCase();
-                        Util.print(value, many, property);
-                    }
-                    case ZERO -> System.out.println("Goodbye!");
+                    case EMPTY -> System.out.println(Messages.INSTRUCTIONS);
+                    case INVALID_FIRST_NUMBER -> System.out.println(Messages.FIRST_ERROR);
+                    case INVALID_SECOND_NUMBER -> System.out.println(Messages.SECOND_ERROR);
+                    case INVALID_PROPERTY ->
+                            System.out.printf(Messages.PROPERTY_ERROR.toString(), Arrays.toString(Util.propertyError(property, inputProperty)));
+                    case INVALID_ALL_PROPERTY -> System.out.println(Messages.INCORRECT_PROPERTIES);
+                    case MUTUALLY_EXCLUSIVE ->
+                            System.out.printf(Messages.MUTUALLY_EXCLUSIVE_ERROR.toString(), Arrays.toString(property));
+                    case FIRST_NUMBER -> Util.print(value[0]);
+                    case SECOND_NUMBER -> Util.print(value[0], value[1]);
+                    case PROPERTY -> Util.print(value[0], value[1], property);
+                    case ZERO -> System.out.println(Messages.GOODBYE);
                 }
             } while (request != Request.ZERO);
         }
