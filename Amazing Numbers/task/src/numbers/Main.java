@@ -1,140 +1,47 @@
 package numbers;
 
-import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         try (Scanner sc = new Scanner(System.in)) {
             System.out.println("Welcome to Amazing Numbers!");
-            instructions();
+            Util.instructions();
+            Request request;
 
-            while (true) {
+            do {
                 System.out.println("Enter a request:");
-                String inputStr = sc.nextLine();
+                String userInput = sc.nextLine();
+                request = Util.checkRequest(userInput);
 
-                if (inputStr.isEmpty()) {
-                    instructions();
-
-                } else if (inputStr.equals("0")) {
-                    System.out.println("Goodbye!");
-                    break;
-                } else {
-                    String[] arr = inputStr.split(" ");
-
-                    if (isnNaturalNumbers(arr[0])) {
-                        long firstNum = Long.parseLong(arr[0]);
-
-                        if (arr.length == 1) {
-                            printFirst(firstNum);
-                        } else {
-                            if (isnNaturalNumbers(arr[1])) {
-                                long secondNum = Long.parseLong(arr[1]);
-
-                                for (long i = 0; i < secondNum; i++) {
-                                    printSecond(firstNum++);
-                                }
-                            } else {
-                                System.out.println("The second parameter should be a natural number.");
-                            }
-                        }
-                    } else {
-                        System.out.println("The first parameter should be a natural number or zero.");
+                switch (request) {
+                    case EMPTY -> Util.instructions();
+                    case INVALID_FIRST_NUMBER ->
+                            System.out.println("The first parameter should be a natural number or zero.");
+                    case INVALID_SECOND_NUMBER ->
+                            System.out.println("The second parameter should be a natural number.");
+                    case INVALID_THIRD_NUMBER -> System.out.printf("""
+                            The property [%s] is wrong.
+                            Available properties: [EVEN, ODD, BUZZ, DUCK, PALINDROMIC, GAPFUL, SPY]
+                            """, userInput.split(" ")[2].toUpperCase());
+                    case FIRST_NUMBER -> {
+                        long value = Long.parseLong(userInput);
+                        Util.print(value);
                     }
+                    case SECOND_NUMBER -> {
+                        long value = Long.parseLong(userInput.split(" ")[0]);
+                        int many = Integer.parseInt(userInput.split(" ")[1]);
+                        Util.print(value, many);
+                    }
+                    case THIRD_NUMBER -> {
+                        long value = Long.parseLong(userInput.split(" ")[0]);
+                        int many = Integer.parseInt(userInput.split(" ")[1]);
+                        String property = userInput.split(" ")[2].toLowerCase();
+                        Util.print(value, many, property);
+                    }
+                    case ZERO -> System.out.println("Goodbye!");
                 }
-            }
-        }
-    }
-
-    public static void printSecond(long num) {
-        String odd = isOdd(num) ? "odd" : "even";
-        String buzz = isBuzzNumber(num) ? ", buzz" : "";
-        String duck = isDuck(num) ? ", duck" : "";
-        String palindromic = isPalindromic(num) ? ", palindromic" : "";
-        String gapful = isGapful(num) ? ", gapful" : "";
-
-        System.out.printf(Locale.US, "%d is %s%s%s%s%s\n", num, odd, buzz, duck, palindromic, gapful);
-    }
-
-    private static void printFirst(long num) {
-        System.out.printf(Locale.US, """
-                        Properties of %,d
-                                even: %b
-                                 odd: %b
-                                buzz: %b
-                                duck: %b
-                         palindromic: %b
-                              gapful: %b
-                        """,
-                num, !isOdd(num), isOdd(num),
-                isBuzzNumber(num), isDuck(num),
-                isPalindromic(num), isGapful(num));
-    }
-
-    private static boolean isGapful(long num) {
-        long n = num;
-        int count = 0;
-
-        while (n > 9) {
-            n /= 10;
-            count++;
-        }
-
-        long temp = n * 10 + num % 10;
-
-        return count > 2 && num % temp == 0;
-    }
-
-    private static boolean isPalindromic(long num) {
-        long numSrc = num;
-        long reversed = 0;
-
-        while (numSrc != 0) {
-            reversed = reversed * 10 + (numSrc % 10);
-            numSrc /= 10;
-        }
-
-        return num == reversed;
-    }
-
-    private static void instructions() {
-        System.out.println("""
-                Supported requests:
-                - enter a natural number to know its properties;
-                - enter two natural numbers to obtain the properties of the list:
-                  * the first parameter represents a starting number;
-                  * the second parameter shows how many consecutive numbers are to be printed;
-                - separate the parameters with one space;
-                - enter 0 to exit.""");
-    }
-
-    private static boolean isDuck(long num) {
-        long numTrim = num;
-
-        for (long i = numTrim; i >= 10; i /= 10) {
-            if (numTrim % 10 == 0) {
-                return true;
-            }
-
-            numTrim /= 10;
-        }
-
-        return false;
-    }
-
-    private static boolean isBuzzNumber(long num) {
-        return num % 7 == 0 || num % 10 == 7;
-    }
-
-    private static boolean isOdd(long num) {
-        return (num & 1) == 1;
-    }
-
-    private static boolean isnNaturalNumbers(String str) {
-        try {
-            return Long.parseLong(str) > 0;
-        } catch (NumberFormatException e) {
-            return false;
+            } while (request != Request.ZERO);
         }
     }
 }
